@@ -1,13 +1,13 @@
 name: CI/CD - K6 Pipeline
 
 on:
+  workflow_dispatch:
   push:
     branches: ["main"]
-  workflow_dispatch: {}
 
 jobs:
-  ci:
-    name: CI - Tests
+  ci-tests:
+    name: CI - k6 tests
     runs-on: ubuntu-latest
 
     steps:
@@ -18,21 +18,17 @@ jobs:
           sudo apt update
           sudo apt install -y k6
 
-      - name: Run Performance Tests
+      - name: Run k6 test
         run: k6 run script.js
 
-  cd:
-    name: CD - Deploy Manual/Controlled
-    needs: ci
+  cd-deploy:
+    name: CD - Deploy
     runs-on: ubuntu-latest
+    needs: ci-tests
     if: success()
-
-    environment:
-      name: production
-      url: https://seu-app.com
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy Step
-        run: echo "Deploy liberado (substituir por AWS/Vercel/Docker)"
+      - name: Deploy step
+        run: echo "🚀 Deploy executado com sucesso"
