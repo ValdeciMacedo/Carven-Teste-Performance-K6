@@ -1,41 +1,38 @@
-name: 🚀 Carven Performance Tests
+name: CI/CD - K6 Pipeline
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-  workflow_dispatch:  # execução manual
+    branches: ["main"]
+  workflow_dispatch: {}
 
 jobs:
-  k6-tests:
+  ci:
+    name: CI - Tests
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout do código
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: ⚙️ Instalar k6
+      - name: Install k6
         run: |
-          sudo apt update
-          sudo apt install -y gnupg ca-certificates curl
-
-          curl -fsSL https://dl.k6.io/key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/k6.gpg
-
-          echo "deb [signed-by=/usr/share/keyrings/k6.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
-
           sudo apt update
           sudo apt install -y k6
 
-          k6 version
+      - name: Run Performance Tests
+        run: k6 run script.js
 
-      - name: 🧪 Smoke Test
-        run: k6 run tests/smoke/home.smoke.test.js
+  cd:
+    name: CD - Deploy Manual/Controlled
+    needs: ci
+    runs-on: ubuntu-latest
+    if: success()
 
-      - name: 📊 Load Test
-        run: k6 run tests/load/home.load.test.js
+    environment:
+      name: production
+      url: https://seu-app.com
 
-      - name: 🔥 Stress Test
-        run: k6 run tests/stress/home.stress.test.js
+    steps:
+      - uses: actions/checkout@v4
 
-      - name: ⚡ Spike Test
-        run: k6 run tests/spike/home.spike.test.js
+      - name: Deploy Step
+        run: echo "Deploy liberado (substituir por AWS/Vercel/Docker)"
