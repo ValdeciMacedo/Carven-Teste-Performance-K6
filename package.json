@@ -1,0 +1,14 @@
+{
+  "name": "carven-performance-tests",
+  "version": "1.0.0",
+  "description": "Testes de performance com k6 no site Carven",
+  "main": "index.js",
+  "scripts": {
+    "smoke": "C:\\Progra~1\\k6\\k6.exe run tests/smoke/home.smoke.test.js",
+    "load": "C:\\Progra~1\\k6\\k6.exe run tests/load/home.load.test.js",
+    "stress": "C:\\Progra~1\\k6\\k6.exe run tests/stress/home.stress.test.js",
+    "spike": "C:\\Progra~1\\k6\\k6.exe run tests/spike/home.spike.test.js"
+  },
+  "author": "Valdeci Macedo",
+  "license": "ISC"
+}
